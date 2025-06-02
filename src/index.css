@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@theme {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-accent: var(--accent);
+}
+
+@layer base {
+  :root {
+    --primary: #007aff; /* iOS Blue */
+    --secondary: #5856d6; /* Soft Purple */
+    --bg: #ffffff; /* White */
+    --surface: #f2f2f7; /* Light Gray Surface */
+    --text: #1c1c1e; /* Rich Black */
+    --accent: #34c759; /* Green Accent (Send button, etc.) */
+  }
+
+  [data-theme="dark"] {
+    --primary: #339cff; /* Lighter blue for dark */
+    --secondary: #7e74f1; /* Soft purple variant */
+    --bg: #1c1c1e; /* Near black */
+    --surface: #2c2c2e; /* Deep gray surface */
+    --text: #f2f2f7; /* Light text */
+    --accent: #30d158; /* Softer green accent */
+  }
+
+  [data-theme="pastel"] {
+    --primary: #a7c7ff; /* Pastel Blue */
+    --secondary: #cab8ff; /* Pastel Purple */
+    --bg: #fff7f0; /* Peachy background */
+    --surface: #fbeaff; /* Soft pink */
+    --text: #444444; /* Medium dark */
+    --accent: #ffb3c6; /* Pink accent */
+  }
+
+  [data-theme="corporate "] {
+    --primary: #2c3e50; /* Dark Blue-Gray */
+    --secondary: #95a5a6; /* Muted Gray */
+    --bg: #ecf0f1; /* Off-white */
+    --surface: #dcdde1; /* Soft Gray */
+    --text: #2d3436; /* Charcoal */
+    --accent: #2980b9; /* Bold Blue Accent */
+  }
+}
