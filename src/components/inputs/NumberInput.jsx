@@ -1,6 +1,6 @@
 import React from "react";
 
-const TextInput = ({
+const NumberInput = ({
   label,
   value,
   onChange,
@@ -17,7 +17,7 @@ const TextInput = ({
       <input
         id={id || ""}
         name={name || ""}
-        type="text"
+        type="number"
         value={value || ""}
         placeholder={placeholder || ""}
         onChange={onChange || ""}
@@ -28,4 +28,5 @@ const TextInput = ({
   );
 };
 
-export default TextInput;
+export default NumberInput;
+2;

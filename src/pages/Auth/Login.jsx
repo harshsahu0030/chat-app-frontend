@@ -4,8 +4,10 @@ import { authenticationLinks } from "../../data/linksData";
 import TextInput from "../../components/inputs/TextInput";
 import SubmitButton from "../../components/buttons/SubmitButton";
 import PasswordInput from "../../components/inputs/PasswordInput";
+import { loginValidationSchema } from "../../validators/loginValidator";
 
 const Login = () => {
+  const [errors, setErrors] = useState({});
   const [loginForm, setLoginForm] = useState({
     input: "",
     password: "",
@@ -16,8 +18,21 @@ const Login = () => {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+
+    try {
+      await loginValidationSchema.validate(loginForm, { abortEarly: false });
+      console.log(loginForm);
+    } catch (error) {
+      const newErrors = {};
+
+      error.inner.forEach((err) => {
+        newErrors[err.path] = err.message;
+      });
+
+      setErrors(newErrors);
+    }
   };
 
   return (
@@ -33,6 +48,7 @@ const Login = () => {
 
         <hr className="my-2 text-surface" />
 
+
         {/* center  */}
         <form className="flex flex-col gap-4" onSubmit={submitHandler}>
           <TextInput
@@ -42,6 +58,7 @@ const Login = () => {
             value={loginForm.input}
             onChange={onChangeHandler}
             placeholder="username or email"
+            error={errors.input}
           />
           <PasswordInput
             id="login-password"
@@ -50,10 +67,19 @@ const Login = () => {
             value={loginForm.password}
             onChange={onChangeHandler}
             placeholder="password"
+            error={errors.password}
           />
+
+          <Link
+            className="text-xs text-primary hover:underline w-full text-end"
+            to={"/auth/forgot-password"}
+          >
+            forgot password?
+          </Link>
+
           <SubmitButton label="Login" />
 
-          <span className="text-xs mt-2">
+          <span className="text-xs mt-2 pl-2">
             Don't have account?{" "}
             <Link
               to={"/auth/signup"}
@@ -64,7 +90,7 @@ const Login = () => {
           </span>
         </form>
 
-        <hr className="my-2 text-surface" />
+        <hr className="my-2 text-text" />
 
         {/* bottom */}
         <ul className="flex w-full gap-4 justify-center flex-wrap">

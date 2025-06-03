@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const PasswordInput = ({ label, value, onChange, id, name, placeholder }) => {
+const PasswordInput = ({ label, value, onChange, id, name, placeholder,error }) => {
   const [show, setshow] = useState(false);
 
   return (
@@ -28,6 +28,7 @@ const PasswordInput = ({ label, value, onChange, id, name, placeholder }) => {
           {show ? "Hide" : "Show"}
         </button>
       </div>
+      {!!error && <span className="text-red-500 text-xs">{error}</span>}
     </div>
   );
 };

@@ -1,29 +1,28 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { authenticationLinks } from "../../data/linksData";
-import TextInput from "../../components/inputs/TextInput";
 import SubmitButton from "../../components/buttons/SubmitButton";
-import { resetValidationSchema } from "../../validators/resetValidator";
+import NumberInput from "../../components/inputs/NumberInput";
+import { otpValidationSchema } from "../../validators/otpValidator";
 
-const ResetPassword = () => {
+const OtpVerfication = () => {
   const [errors, setErrors] = useState({});
 
-  const [resetForm, setResetForm] = useState({
-    password: "",
-    confirmPassword: "",
+  const [otpForm, setOtpForm] = useState({
+    otp: "",
   });
 
   // function
   const onChangeHandler = (e) => {
-    setResetForm({ ...resetForm, [e.target.name]: e.target.value });
+    setOtpForm({ ...otpForm, [e.target.name]: e.target.value });
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
     try {
-      await resetValidationSchema.validate(resetForm, { abortEarly: false });
-      console.log(resetForm);
+      await otpValidationSchema.validate(otpForm, { abortEarly: false });
+      console.log(otpForm);
     } catch (error) {
       const newErrors = {};
 
@@ -40,40 +39,28 @@ const ResetPassword = () => {
       <div className="w-full sm:w-[70%] xl:w-[30%] h-fit flex flex-col gap-2 p-5 border rounded-sm border-surface">
         {/* top  */}
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-medium capitalize">reset password</h1>
-          <h2 className="text-sm">
-            Chat-App helps you connect and share with the people in your life.
-          </h2>
+          <h1 className="text-2xl font-medium capitalize">vesendrify yourself</h1>
+          <h2 className="text-sm">Provide us the otp  to your email.</h2>
         </div>
 
         <hr className="my-2 text-surface" />
 
         {/* center  */}
         <form className="flex flex-col gap-4" onSubmit={submitHandler}>
-          <TextInput
-            id="reset-password"
-            name="password"
-            label="Password"
-            value={resetForm.password}
+          <NumberInput
+            id="otp-otp"
+            name="otp"
+            label="OTP Number"
+            value={otpForm.otp}
             onChange={onChangeHandler}
-            placeholder="Password"
-            error={errors.password}
-          />
-
-          <TextInput
-            id="reset-confirmPassword"
-            name="confirmPassword"
-            label="Confirm Password"
-            value={resetForm.confirmPassword}
-            onChange={onChangeHandler}
-            placeholder="Confirm Password"
-            error={errors.confirmPassword}
+            placeholder="OTP"
+            error={errors.otp}
           />
 
           <SubmitButton label="Submit" />
 
           <span className="text-xs mt-2">
-            Remeber your password?
+            Already have account?
             <Link
               to={"/auth/signup"}
               className="text-primary font-medium hover:underline pl-2"
@@ -101,4 +88,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default OtpVerfication;

@@ -1,12 +1,19 @@
 import React, { lazy, Suspense } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  HydratedRouter,
+  RouterProvider,
+} from "react-router-dom";
 import { Authenticated, Authentication, Layout } from "./Layout";
+import PageLoader from "./components/Loader/PageLoader.jsx";
+import Error from "./pages/Error.jsx";
 
 //auth
 const Login = lazy(() => import("./pages/Auth/Login.jsx"));
 const Signup = lazy(() => import("./pages/Auth/Signup.jsx"));
 const ForgotPassword = lazy(() => import("./pages/Auth/ForgotPassword.jsx"));
 const ResetPassword = lazy(() => import("./pages/Auth/ResetPassword.jsx"));
+const OtpVerfication = lazy(() => import("./pages/Auth/OtpVerfication.jsx"));
 
 //authenticated
 const Home = lazy(() => import("./pages/Authenticated/Home.jsx"));
@@ -26,8 +33,7 @@ const App = () => {
     {
       path: "/",
       element: <Authenticated />,
-      errorElement: "Error",
-      lazy,
+      errorElement: <Error />,
       children: [
         {
           path: "",
@@ -48,8 +54,7 @@ const App = () => {
     {
       path: "/",
       element: <Layout />,
-      errorElement: "Error",
-      lazy,
+      errorElement: <Error />,
       children: [
         {
           path: "about",
@@ -81,8 +86,7 @@ const App = () => {
     {
       path: "/",
       element: <Authentication />,
-      errorElement: "Error",
-      lazy,
+      errorElement: <Error />,
       children: [
         {
           path: "auth/login",
@@ -91,6 +95,10 @@ const App = () => {
         {
           path: "auth/signup",
           element: <Signup />,
+        },
+        {
+          path: "auth/signup/otp-verfication/:token",
+          element: <OtpVerfication />,
         },
         {
           path: "auth/forgot-password",
@@ -105,7 +113,7 @@ const App = () => {
   ]);
   return (
     <div>
-      <Suspense fallback={"loading"}>
+      <Suspense fallback={<PageLoader />}>
         <RouterProvider router={router} />
       </Suspense>
     </div>

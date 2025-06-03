@@ -4,8 +4,10 @@ import { authenticationLinks } from "../../data/linksData";
 import TextInput from "../../components/inputs/TextInput";
 import PasswordInput from "../../components/inputs/PasswordInput";
 import SubmitButton from "../../components/buttons/SubmitButton";
+import { signupValidationSchema } from "../../validators/signupValidator";
 
 const Signup = () => {
+  const [errors, setErrors] = useState({});
   const [signupForm, setsignupForm] = useState({
     email: "",
     password: "",
@@ -18,9 +20,21 @@ const Signup = () => {
     setsignupForm({ ...signupForm, [e.target.name]: e.target.value });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(signupForm);
+
+    try {
+      await signupValidationSchema.validate(signupForm, { abortEarly: false });
+      console.log(signupForm);
+    } catch (error) {
+      const newErrors = {};
+
+      error.inner.forEach((err) => {
+        newErrors[err.path] = err.message;
+      });
+
+      setErrors(newErrors);
+    }
   };
 
   return (
@@ -45,6 +59,7 @@ const Signup = () => {
             value={signupForm.fullName}
             onChange={onChangeHandler}
             placeholder="Full Name"
+            error={errors.fullName}
           />
           <TextInput
             id="signup-email"
@@ -53,6 +68,7 @@ const Signup = () => {
             value={signupForm.email}
             onChange={onChangeHandler}
             placeholder="Email"
+            error={errors.email}
           />
           <TextInput
             id="signup-username"
@@ -61,6 +77,7 @@ const Signup = () => {
             value={signupForm.username}
             onChange={onChangeHandler}
             placeholder="Username"
+            error={errors.username}
           />
           <PasswordInput
             id="signup-password"
@@ -69,6 +86,7 @@ const Signup = () => {
             value={signupForm.password}
             onChange={onChangeHandler}
             placeholder="password"
+            error={errors.password}
           />
           <SubmitButton label="SignUp" />
 
@@ -76,14 +94,14 @@ const Signup = () => {
             Already have account?{" "}
             <Link
               to={"/auth/login"}
-              className="text-primary font-medium hover:underline"
+              className="text-primary font-medium hover:underline pl-2"
             >
               Login Now
             </Link>
           </span>
         </form>
 
-        <hr className="my-2 text-surface" />
+        <hr className="my-2 text-text" />
 
         {/* bottom */}
         <ul className="flex w-full gap-4 justify-center flex-wrap">

@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
 export const Layout = () => {
   return (
@@ -17,6 +18,10 @@ export const Authentication = () => {
   if (!authenticated) {
     return (
       <div className="min-h-screen w-full bg-bg text-text px-4">
+        <header className="h-15 md:h-20 w-full py-2">
+          <Header />
+        </header>
+
         <main className="w-full h-full">
           <Outlet />
         </main>
