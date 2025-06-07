@@ -44,7 +44,7 @@ const Signup = () => {
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-medium capitalize">SignUp</h1>
           <h2 className="text-xs">
-            Chat-App helps you connect and share with the people in your life.
+            Rista helps you connect and share with the people in your life.
           </h2>
         </div>
 

@@ -1,9 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import {
-  createBrowserRouter,
-  HydratedRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Authenticated, Authentication, Layout } from "./Layout";
 import PageLoader from "./components/Loader/PageLoader.jsx";
 import Error from "./pages/Error.jsx";
@@ -19,14 +15,22 @@ const OtpVerfication = lazy(() => import("./pages/Auth/OtpVerfication.jsx"));
 const Home = lazy(() => import("./pages/Authenticated/Home.jsx"));
 const Chat = lazy(() => import("./pages/Authenticated/Chat.jsx"));
 const Group = lazy(() => import("./pages/Authenticated/Group.jsx"));
+const Search = lazy(() => import("./pages/Authenticated//Search.jsx"));
+const Chats = lazy(() => import("./pages/Authenticated/Chats.jsx"));
+const Friends = lazy(() => import("./pages/Authenticated/Friends.jsx"));
+const Profile = lazy(() => import("./pages/Authenticated/Profile.jsx"));
+const Notifications = lazy(() =>
+  import("./pages/Authenticated/Notifications.jsx")
+);
+const Bookmarks = lazy(() => import("./pages/Authenticated/Bookmarks.jsx"));
 
 //all
-const About = lazy(() => import("./pages/All/About.jsx"));
-const Contact = lazy(() => import("./pages/All/Contact.jsx"));
-const Help = lazy(() => import("./pages/All/Help.jsx"));
-const Privacy = lazy(() => import("./pages/All/Privacy.jsx"));
-const Terms = lazy(() => import("./pages/All/Terms.jsx"));
-const Blog = lazy(() => import("./pages/All/Blog.jsx"));
+const About = lazy(() => import("./pages/Shared/About.jsx"));
+const Contact = lazy(() => import("./pages/Shared/Contact.jsx"));
+const Help = lazy(() => import("./pages/Shared/Help.jsx"));
+const Privacy = lazy(() => import("./pages/Shared/Privacy.jsx"));
+const Terms = lazy(() => import("./pages/Shared/Terms.jsx"));
+const Blog = lazy(() => import("./pages/Shared/Blog.jsx"));
 
 const App = () => {
   const router = createBrowserRouter([
@@ -40,12 +44,36 @@ const App = () => {
           element: <Home />,
         },
         {
-          path: "/chat/:chatId",
+          path: "/group",
+          element: <Group />,
+        },
+        {
+          path: "/search",
+          element: <Search />,
+        },
+        {
+          path: "/chats",
+          element: <Chats />,
+        },
+        {
+          path: "/chats/:chatId",
           element: <Chat />,
         },
         {
-          path: "/group",
-          element: <Group />,
+          path: "/friends",
+          element: <Friends />,
+        },
+        {
+          path: "/notifications",
+          element: <Notifications />,
+        },
+        {
+          path: "/:id",
+          element: <Profile />,
+        },
+        {
+          path: "/bookmarks",
+          element: <Bookmarks />,
         },
       ],
     },
