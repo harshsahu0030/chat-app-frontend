@@ -2,6 +2,7 @@ import React from "react";
 import { authenticationLinks, navigateButtonLinks } from "../../data/linksData";
 import NavigateBoxSkeleton from "../../components/skeletons/NavigateBoxSkeleton";
 import NavigateButton from "../../components/buttons/NavigateButton";
+import { IoPersonCircle } from "react-icons/io5";
 
 const Bookmarks = () => {
   return (
@@ -10,6 +11,13 @@ const Bookmarks = () => {
         quick links
       </h5>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+        <NavigateButton
+          data={{
+            label: "Your Profile",
+            url: "/abc123",
+            icon: IoPersonCircle,
+          }}
+        />
         {navigateButtonLinks ? (
           navigateButtonLinks?.map((item, index) => (
             <NavigateButton key={index} data={item} />

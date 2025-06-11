@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
+import UserButton from "../buttons/UserButton";
 
-const FriendDialog = ({ closeHandler }) => {
+const MembersDialog = ({ closeHandler }) => {
   const dialogRef = useRef();
 
   const handleOutsideClick = (e) => {
@@ -22,8 +23,13 @@ const FriendDialog = ({ closeHandler }) => {
 
         <hr className="border border-text/10" />
 
+        <UserButton />
+
+        <button className="bg-secondary w-full text-sm font-semibold px-4 py-1 rounded-md cursor-pointer transition-all hover:scale-95">
+          Add From Group
+        </button>
         <button className="bg-red-400 w-full text-sm font-semibold px-4 py-1 rounded-md cursor-pointer transition-all hover:scale-95">
-          End Relation
+          Remove From Group
         </button>
 
         <button
@@ -37,4 +43,4 @@ const FriendDialog = ({ closeHandler }) => {
   );
 };
 
-export default FriendDialog;
+export default MembersDialog;

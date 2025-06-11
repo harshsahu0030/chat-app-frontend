@@ -12,6 +12,7 @@ const Header = () => {
       {/* left  */}
       <div className="h-full flex items-center col-span-4 sm:col-span-3">
         <img
+          loading="lazy"
           src={LOGO}
           alt="logo"
           className="h-[7vh] md:h-[4vh] xl:h-[7vh] w-fit object-contain cursor-pointer hover:scale-95 transition-all hover:drop-shadow-lg hover:drop-shadow-secondary"

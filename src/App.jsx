@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Authenticated, Authentication, Layout } from "./Layout";
+import { Admin, Authenticated, Authentication, Layout } from "./Layout";
 import PageLoader from "./components/Loader/PageLoader.jsx";
 import Error from "./pages/Error.jsx";
 
@@ -18,11 +18,18 @@ const Group = lazy(() => import("./pages/Authenticated/Group.jsx"));
 const Search = lazy(() => import("./pages/Authenticated//Search.jsx"));
 const Chats = lazy(() => import("./pages/Authenticated/Chats.jsx"));
 const Friends = lazy(() => import("./pages/Authenticated/Friends.jsx"));
+const FriendsRequest = lazy(() =>
+  import("./pages/Authenticated/FriendsRequest.jsx")
+);
 const Profile = lazy(() => import("./pages/Authenticated/Profile.jsx"));
 const Notifications = lazy(() =>
   import("./pages/Authenticated/Notifications.jsx")
 );
 const Bookmarks = lazy(() => import("./pages/Authenticated/Bookmarks.jsx"));
+const UpdateProfile = lazy(() =>
+  import("./pages/Authenticated/UpdateProfile.jsx")
+);
+const CreateGroup = lazy(() => import("./pages/Authenticated/CreateGroup.jsx"));
 
 //all
 const About = lazy(() => import("./pages/Shared/About.jsx"));
@@ -35,6 +42,12 @@ const Blog = lazy(() => import("./pages/Shared/Blog.jsx"));
 const App = () => {
   const router = createBrowserRouter([
     {
+      path: "/admin",
+      element: <Admin />,
+      errorElement: <Error />,
+      children: [],
+    },
+    {
       path: "/",
       element: <Authenticated />,
       errorElement: <Error />,
@@ -44,8 +57,12 @@ const App = () => {
           element: <Home />,
         },
         {
-          path: "/group",
+          path: "/groups",
           element: <Group />,
+        },
+        {
+          path: "/groups/create",
+          element: <CreateGroup />,
         },
         {
           path: "/search",
@@ -64,12 +81,20 @@ const App = () => {
           element: <Friends />,
         },
         {
+          path: "/friends/request",
+          element: <FriendsRequest />,
+        },
+        {
           path: "/notifications",
           element: <Notifications />,
         },
         {
           path: "/:id",
           element: <Profile />,
+        },
+        {
+          path: "/update/:id",
+          element: <UpdateProfile />,
         },
         {
           path: "/bookmarks",

@@ -8,7 +8,6 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { IoPeopleOutline } from "react-icons/io5";
 import { IoPeopleSharp } from "react-icons/io5";
-import { IoPersonCircle } from "react-icons/io5";
 import { IoBookmark } from "react-icons/io5";
 import { TiGroup } from "react-icons/ti";
 import { FaBlog } from "react-icons/fa";
@@ -84,11 +83,6 @@ export const Navbarlinks = [
 ];
 
 export const navigateButtonLinks = [
-  {
-    label: "your profile",
-    url: "/profile",
-    icon: IoPersonCircle,
-  },
   {
     label: "home",
     url: "/",

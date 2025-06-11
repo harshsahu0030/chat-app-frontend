@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-const FriendDialog = ({ closeHandler }) => {
+const GroupInfoDialog = ({ closeHandler }) => {
   const dialogRef = useRef();
 
   const handleOutsideClick = (e) => {
@@ -18,12 +18,12 @@ const FriendDialog = ({ closeHandler }) => {
         className="h-fit w-[80%] md:w-[40%] xl:w-[30%] bg-surface p-4 rounded-md flex flex-col gap-4"
       >
         {/* top  */}
-        <div className="text-base font-bold">Manage Relation</div>
+        <div className="text-base font-bold">Group Information</div>
 
         <hr className="border border-text/10" />
 
         <button className="bg-red-400 w-full text-sm font-semibold px-4 py-1 rounded-md cursor-pointer transition-all hover:scale-95">
-          End Relation
+          Leave Group
         </button>
 
         <button
@@ -37,4 +37,4 @@ const FriendDialog = ({ closeHandler }) => {
   );
 };
 
-export default FriendDialog;
+export default GroupInfoDialog;

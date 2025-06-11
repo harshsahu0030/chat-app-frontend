@@ -1,4 +1,4 @@
-import React, { createElement, useState } from "react";
+import { createElement, useState } from "react";
 import UserImg from "/userprofile.png";
 import { Link } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -6,13 +6,14 @@ import { MdEdit } from "react-icons/md";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import FriendDialog from "../../components/DialogBox/FriendDialog";
+import { RiMessage2Fill } from "react-icons/ri";
 
 const ProfileButton = ({ variant, label, icon, clickHandler }) => {
   return (
     <button
       type="button"
       onClick={clickHandler ? clickHandler : () => {}}
-      className={`flex-1/2 flex items-center justify-center gap-1 p-2 rounded-lg font-semibold cursor-pointer transition-all hover:scale-95 ${
+      className={`ax-h-fit flex-1/2 flex items-center justify-center gap-1 p-2 rounded-lg font-semibold cursor-pointer transition-all hover:scale-95 ${
         variant === "dark" ? "bg-surface" : "bg-primary"
       }`}
     >
@@ -23,7 +24,7 @@ const ProfileButton = ({ variant, label, icon, clickHandler }) => {
 };
 
 const Profile = () => {
-  const user = false;
+  const user = true;
 
   //states
   const [manageFriend, setManageFriend] = useState(false);
@@ -33,7 +34,6 @@ const Profile = () => {
       {/* top  */}
       <div className="flex items-center justify-between gap-5 bg-surface p-4 rounded-lg">
         <span className="text-base font-semibold">harsh0030</span>
-        <BsThreeDotsVertical className="text-xl cursor-pointer transition-all hover:scale-95" />
       </div>
 
       <div className="w-full h-fit flex justify-between gap-5 p-4 rounded-lg items-center">
@@ -69,16 +69,25 @@ const Profile = () => {
         </div>
       )}
 
-      {/* <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-sm">
         <ProfileButton label={"confirm request"} icon={IoCheckmarkSharp} />
         <ProfileButton
           variant={"dark"}
           label={"reject request"}
           icon={IoMdClose }
         />
-      </div> */}
+      </div>
 
       <div className="flex items-center gap-2 text-sm">
+        <ProfileButton
+          variant={"dark"}
+          label={"cancel request"}
+          icon={IoMdClose }
+        />
+      </div>
+
+      <div className="flex items-center gap-2 text-sm">
+        <ProfileButton label={"message"} icon={RiMessage2Fill} />
         <ProfileButton
           variant={"dark"}
           label={"friends"}

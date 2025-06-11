@@ -8,7 +8,7 @@ const NavigateButton = ({ data }) => {
       className="flex gap-2 items-center p-2 text-xl capitalize font-medium rounded-lg hover:bg-surface transition-all cursor-pointer"
       onClick={() => navigate(data?.url)}
     >
-      {data.icon && createElement(data?.icon)}
+      {data.icon && createElement(data?.icon) }
       {data?.label}
     </div>
   );
