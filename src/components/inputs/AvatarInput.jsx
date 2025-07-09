@@ -19,8 +19,9 @@ const AvatarInput = ({ id, name, avatarHandler, value, avatarPreview }) => {
         <input
           id={id}
           name={name}
-          type="file"
           className="hidden"
+          type="file"
+          accept="image/*"
           value={value}
           onChange={avatarHandler}
         />

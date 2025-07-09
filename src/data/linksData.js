@@ -58,7 +58,7 @@ export const Navbarlinks = [
   },
   {
     label: "search",
-    url: "/search",
+    url: "/users",
     icon: IoSearchOutline,
     activeIcon: IoSearchSharp,
   },
@@ -90,7 +90,7 @@ export const navigateButtonLinks = [
   },
   {
     label: "search",
-    url: "/search",
+    url: "/users",
     icon: IoSearchSharp,
   },
   {

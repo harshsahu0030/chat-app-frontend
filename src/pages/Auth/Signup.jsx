@@ -5,14 +5,22 @@ import TextInput from "../../components/inputs/TextInput";
 import PasswordInput from "../../components/inputs/PasswordInput";
 import SubmitButton from "../../components/buttons/SubmitButton";
 import { signupValidationSchema } from "../../validators/signupValidator";
+import { useDispatch, useSelector } from "react-redux";
+import { useApiResponse } from "../../hooks/ApiResponse";
+import { userRegister } from "../../app/redux/thunk/auth.thunk";
 
 const Signup = () => {
+  //redux
+  const dispatch = useDispatch();
+  const { message, loading, error } = useSelector((state) => state.auth);
+
+  // state
   const [errors, setErrors] = useState({});
   const [signupForm, setsignupForm] = useState({
+    name: "",
+    username: "",
     email: "",
     password: "",
-    username: "",
-    fullName: "",
   });
 
   // function
@@ -25,7 +33,7 @@ const Signup = () => {
 
     try {
       await signupValidationSchema.validate(signupForm, { abortEarly: false });
-      console.log(signupForm);
+      dispatch(userRegister(signupForm));
     } catch (error) {
       const newErrors = {};
 
@@ -36,6 +44,9 @@ const Signup = () => {
       setErrors(newErrors);
     }
   };
+
+  //api response
+  useApiResponse({ message, error, navigation: "/" });
 
   return (
     <section className="h-full w-full flex justify-center py-10">
@@ -53,13 +64,13 @@ const Signup = () => {
         {/* center  */}
         <form className="flex flex-col gap-4" onSubmit={submitHandler}>
           <TextInput
-            id="signup-fullName"
-            name="fullName"
-            label="Full Name"
-            value={signupForm.fullName}
+            id="signup-name"
+            name="name"
+            label="Name"
+            value={signupForm.name}
             onChange={onChangeHandler}
-            placeholder="Full Name"
-            error={errors.fullName}
+            placeholder="Name"
+            error={errors.name}
           />
           <TextInput
             id="signup-email"
@@ -88,7 +99,7 @@ const Signup = () => {
             placeholder="password"
             error={errors.password}
           />
-          <SubmitButton label="SignUp" />
+          <SubmitButton disabled={loading} label="Submit" />
 
           <span className="text-xs mt-2">
             Already have account?{" "}

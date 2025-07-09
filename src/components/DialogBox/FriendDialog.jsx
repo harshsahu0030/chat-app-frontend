@@ -1,7 +1,29 @@
+import { useMutation } from "@tanstack/react-query";
 import React, { useRef } from "react";
+import { removeFriendApi } from "../../app/api/user.api";
+import toast from "react-hot-toast";
 
-const FriendDialog = ({ closeHandler }) => {
+const FriendDialog = ({ closeHandler, userId, relationRefetch }) => {
   const dialogRef = useRef();
+
+  //react-queries
+  const { mutate, isPending } = useMutation({
+    mutationFn: removeFriendApi,
+
+    onError: (error) => {
+      toast.error(error.response.data.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      relationRefetch();
+    },
+  });
+
+  //function
+  const handleRemoveFriend = () => {
+    mutate(userId);
+    closeHandler();
+  };
 
   const handleOutsideClick = (e) => {
     if (dialogRef.current && !dialogRef.current.contains(e.target)) {
@@ -22,11 +44,17 @@ const FriendDialog = ({ closeHandler }) => {
 
         <hr className="border border-text/10" />
 
-        <button className="bg-red-400 w-full text-sm font-semibold px-4 py-1 rounded-md cursor-pointer transition-all hover:scale-95">
-          End Relation
+        <button
+          type="button"
+          disabled={isPending}
+          className="bg-red-400 w-full text-sm font-semibold px-4 py-1 rounded-md cursor-pointer transition-all hover:scale-95 disabled:cursor-not-allowed"
+          onClick={handleRemoveFriend}
+        >
+          {isPending ? "loading..." : "Remove Friend"}
         </button>
 
         <button
+          type="button"
           className="bg-accent text-sm font-semibold px-4 py-1 rounded-md cursor-pointer transition-all hover:scale-95"
           onClick={closeHandler}
         >

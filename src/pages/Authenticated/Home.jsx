@@ -1,7 +1,9 @@
-import React from "react";
-
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <section className="h-full w-full rounded-md flex flex-col justify-center items-center">
+      Welcome to Rista
+    </section>
+  );
 };
 
 export default Home;

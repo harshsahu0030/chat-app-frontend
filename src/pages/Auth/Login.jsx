@@ -5,8 +5,14 @@ import TextInput from "../../components/inputs/TextInput";
 import SubmitButton from "../../components/buttons/SubmitButton";
 import PasswordInput from "../../components/inputs/PasswordInput";
 import { loginValidationSchema } from "../../validators/loginValidator";
+import { useDispatch, useSelector } from "react-redux";
+import { useApiResponse } from "../../hooks/ApiResponse";
+import { userLogin } from "../../app/redux/thunk/auth.thunk";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const { message, loading, error } = useSelector((state) => state.auth);
+
   const [errors, setErrors] = useState({});
   const [loginForm, setLoginForm] = useState({
     input: "",
@@ -23,7 +29,7 @@ const Login = () => {
 
     try {
       await loginValidationSchema.validate(loginForm, { abortEarly: false });
-      console.log(loginForm);
+      dispatch(userLogin(loginForm));
     } catch (error) {
       const newErrors = {};
 
@@ -34,6 +40,9 @@ const Login = () => {
       setErrors(newErrors);
     }
   };
+
+  //api response
+  useApiResponse({ message, error, navigation: "/" });
 
   return (
     <section className="h-full w-full flex justify-center py-10">
@@ -47,7 +56,6 @@ const Login = () => {
         </div>
 
         <hr className="my-2 text-surface" />
-
 
         {/* center  */}
         <form className="flex flex-col gap-4" onSubmit={submitHandler}>
@@ -77,7 +85,7 @@ const Login = () => {
             forgot password?
           </Link>
 
-          <SubmitButton label="Login" />
+          <SubmitButton disabled={loading} label="Login" />
 
           <span className="text-xs mt-2 pl-2">
             Don't have account?{" "}

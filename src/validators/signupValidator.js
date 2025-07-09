@@ -2,7 +2,7 @@ import { object, string } from "yup";
 
 //errorHandling
 export const signupValidationSchema = object({
-  fullName: string().trim().required("Full Name is required"),
+  name: string().trim().required("Name is required"),
 
   username: string()
     .strict()

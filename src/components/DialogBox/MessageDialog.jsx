@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-const MessageDialog = ({ closeHandler }) => {
+const MessageDialog = ({ data, closeHandler, user }) => {
   const dialogRef = useRef();
 
   const handleOutsideClick = (e) => {
@@ -18,16 +18,11 @@ const MessageDialog = ({ closeHandler }) => {
         className="h-fit w-[80%] md:w-[40%] xl:w-[30%] bg-surface p-4 rounded-md flex flex-col gap-4"
       >
         {/* top  */}
-        <div className="text-base font-bold">Manage Message</div>
+        <div className="text-base font-bold">{user?.username}</div>
 
         <hr className="border border-text/10" />
 
-        <div className="text-base">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat,
-          perferendis eos quaerat suscipit quo assumenda ipsam id ipsa
-          asperiores sequi, quam ullam sapiente minus ducimus repudiandae nobis,
-          iure eaque autem!
-        </div>
+        <div className="text-base font-medium">{data?.content}</div>
 
         <hr className="border border-text/10" />
 

@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { authenticationLinks } from "../../data/linksData";
 import TextInput from "../../components/inputs/TextInput";
 import SubmitButton from "../../components/buttons/SubmitButton";
 import { resetValidationSchema } from "../../validators/resetValidator";
+import { useDispatch, useSelector } from "react-redux";
+import { useApiResponse } from "../../hooks/ApiResponse";
+import { userResetPassword } from "../../app/redux/thunk/auth.thunk";
 
 const ResetPassword = () => {
+  const { token } = useParams();
+  //redux
+  const dispatch = useDispatch();
+  const { message, loading, error } = useSelector((state) => state.auth);
+
+  //state
   const [errors, setErrors] = useState({});
 
   const [resetForm, setResetForm] = useState({
@@ -23,7 +32,7 @@ const ResetPassword = () => {
 
     try {
       await resetValidationSchema.validate(resetForm, { abortEarly: false });
-      console.log(resetForm);
+      dispatch(userResetPassword({ token, resetForm }));
     } catch (error) {
       const newErrors = {};
 
@@ -34,6 +43,9 @@ const ResetPassword = () => {
       setErrors(newErrors);
     }
   };
+
+  //api response
+  useApiResponse({ message, error, navigation: "/" });
 
   return (
     <section className="h-full w-full flex justify-center py-10">
@@ -70,7 +82,7 @@ const ResetPassword = () => {
             error={errors.confirmPassword}
           />
 
-          <SubmitButton label="Submit" />
+          <SubmitButton disabled={loading} label="Submit" />
 
           <span className="text-xs mt-2">
             Remeber your password?

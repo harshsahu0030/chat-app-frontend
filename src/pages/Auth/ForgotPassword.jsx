@@ -4,8 +4,16 @@ import { authenticationLinks } from "../../data/linksData";
 import TextInput from "../../components/inputs/TextInput";
 import SubmitButton from "../../components/buttons/SubmitButton";
 import { forgotvalidationSchema } from "../../validators/forgotValidator";
+import { useDispatch, useSelector } from "react-redux";
+import { useApiResponse } from "../../hooks/ApiResponse";
+import { userForgotPassword } from "../../app/redux/thunk/auth.thunk";
 
 const ForgotPassword = () => {
+  //redux
+  const dispatch = useDispatch();
+  const { message, loading, error } = useSelector((state) => state.auth);
+
+  //state
   const [errors, setErrors] = useState({});
 
   const [forgotForm, setForgotForm] = useState({
@@ -22,7 +30,7 @@ const ForgotPassword = () => {
 
     try {
       await forgotvalidationSchema.validate(forgotForm, { abortEarly: false });
-      console.log(forgotForm);
+      dispatch(userForgotPassword(forgotForm));
     } catch (error) {
       const newErrors = {};
 
@@ -33,6 +41,9 @@ const ForgotPassword = () => {
       setErrors(newErrors);
     }
   };
+
+  //api response
+  useApiResponse({ message, error, navigation: "/" });
 
   return (
     <section className="h-full w-full flex justify-center py-10">
@@ -59,7 +70,7 @@ const ForgotPassword = () => {
             error={errors.email}
           />
 
-          <SubmitButton label="Submit" />
+          <SubmitButton disabled={loading} label="Submit" />
 
           <span className="text-xs mt-2">
             Remeber your password?

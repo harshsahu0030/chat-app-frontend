@@ -4,9 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { IoMenu } from "react-icons/io5";
 import { IoPersonCircle } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+
   return (
     <div className="h-full w-full overflow-hidden border-b border-surface grid grid-cols-12 gap-5">
       {/* left  */}
@@ -20,26 +23,30 @@ const Header = () => {
         />
       </div>
 
-      {/* center  */}
-      <div className="h-full w-full items-center hidden sm:flex sm:col-span-6">
-        <Navbar />
-      </div>
+      {isAuthenticated && (
+        <>
+          {/* center  */}
+          <div className="h-full w-full items-center hidden sm:flex sm:col-span-6">
+            <Navbar />
+          </div>
 
-      {/* right  */}
-      <div className="h-full w-full flex items-center col-span-8 sm:col-span-3 justify-end text-2xl xl:text-3xl">
-        <Link
-          to="/abc123"
-          className="p-2 rounded-full flex justify-center items-center hover:bg-bg transition-all"
-        >
-          <IoPersonCircle />
-        </Link>
-        <Link
-          to="/bookmarks"
-          className="p-2 rounded-full flex justify-center items-center hover:bg-bg transition-all"
-        >
-          <IoMenu />
-        </Link>
-      </div>
+          {/* right  */}
+          <div className="h-full w-full flex items-center col-span-8 sm:col-span-3 justify-end text-2xl xl:text-3xl">
+            <Link
+              to={`/users/${user?._id}`}
+              className="p-2 rounded-full flex justify-center items-center hover:bg-bg transition-all"
+            >
+              <IoPersonCircle />
+            </Link>
+            <Link
+              to="/bookmarks"
+              className="p-2 rounded-full flex justify-center items-center hover:bg-bg transition-all"
+            >
+              <IoMenu />
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 };
