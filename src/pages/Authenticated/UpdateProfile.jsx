@@ -77,7 +77,10 @@ const UpdateProfile = () => {
   }
 
   return (
-    <section className="h-full w-full flex flex-col gap-2 p-2 overflow-y-scroll [&::-webkit-scrollbar]:hidden">
+    <section
+      aria-label="update-profile"
+      className="h-full w-full flex flex-col gap-2 p-2 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
+    >
       {/* top  */}
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-medium capitalize">Update Profile</h1>

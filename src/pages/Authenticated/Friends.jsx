@@ -7,6 +7,7 @@ import NavigateBoxSkeleton from "../../components/skeletons/NavigateBoxSkeleton"
 import { useDebounce } from "../../hooks/DebounceHook";
 import { getFriendsApi } from "../../app/api/user.api";
 import { useNavigate } from "react-router-dom";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 const Friends = () => {
   const ThreHold = 60;
@@ -32,37 +33,19 @@ const Friends = () => {
     setPage(1);
   };
 
-  const handleScroll = (e) => {
-    const scrollTop = Math.floor(e.target.scrollTop);
-    const clientHeight = Math.floor(e.target.clientHeight);
-    const scrollHeight = Math.floor(e.target.scrollHeight);
-
-    const remaingHeight = scrollHeight - scrollTop - clientHeight;
-
-    if (
-      remaingHeight < ThreHold &&
-      !isLoading &&
-      data?.data?.filteredUsers !== users.length &&
-      data?.data?.totalPages >= page
-    ) {
-      setPage((prev) => prev + 1);
-    }
-  };
+  const handleScroll = useInfiniteScroll({
+    threshold: 60,
+    loading: isLoading,
+    page: page,
+    totalPages: data?.data?.totalPages,
+    setPage: setPage,
+  });
 
   //useEffect
   useEffect(() => {
-    if (!debouncedSearch) return;
-
-    refetch();
-  }, [debouncedSearch, refetch]);
-
-  useEffect(() => {
     if (isSuccess && Array.isArray(data?.data?.friends)) {
       setUsers((prev) => {
-        const existingIds = new Set(prev.map((u) => u._id));
-        const newUsers = data?.data?.friends.filter(
-          (u) => !existingIds.has(u._id)
-        );
+        const newUsers = data?.data?.friends;
         return [...prev, ...newUsers];
       });
     }
@@ -75,7 +58,10 @@ const Friends = () => {
   });
 
   return (
-    <div className="h-full w-full flex flex-col gap-2">
+    <section
+      aria-label="friends-list"
+      className="h-full w-full flex flex-col gap-2"
+    >
       <button
         type="button"
         onClick={() => navigate("/friends/request")}
@@ -110,7 +96,7 @@ const Friends = () => {
           </span>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

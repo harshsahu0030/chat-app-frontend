@@ -11,8 +11,8 @@ export const useApiResponse = ({ message, error, navigation }) => {
   useEffect(() => {
     if (message) {
       toast.success(message);
-      dispatch(clearMessage());
       if (navigation) navigate(navigation);
+      dispatch(clearMessage());
     }
     if (error) {
       toast.error(error);

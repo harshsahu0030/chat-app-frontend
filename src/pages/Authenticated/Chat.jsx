@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -12,16 +12,21 @@ import MessageInput from "../../components/inputs/MessageInput";
 import { useTanstackApiResponse } from "../../hooks/ApiResponse";
 import { useSocketEvents } from "../../hooks/SocketEvent";
 import { getSocket } from "../../Socket";
-import { NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../../constant/events";
+import {
+  NEW_MESSAGE,
+  NEW_MESSAGE_ALERT,
+  START_TYPING,
+  STOP_TYPING,
+} from "../../constant/events";
 import Message from "../../components/messageBox/Message";
 import MessageSkeleton from "../../components/skeletons/MessageSkeleton";
 import toast from "react-hot-toast";
 import { useRef } from "react";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 const Chat = () => {
   const socket = getSocket();
   const { id } = useParams();
-  const ThreHold = 60;
 
   const messagesContainerRef = useRef(null);
 
@@ -33,8 +38,6 @@ const Chat = () => {
   const [members, setMembers] = useState([]);
 
   const [userTyping, setUserTyping] = useState(false);
-
-  console.log(messages);
 
   // queries
   const {
@@ -81,26 +84,14 @@ const Chat = () => {
     messagesContainerRef.current.scrollTop = 0;
   };
 
-  const handleScroll = (e) => {
-    const scrollTop = e.target.scrollTop;
-
-    if (
-      scrollTop < ThreHold &&
-      !isLoading &&
-      data?.data?.totalMessages !== messages.length &&
-      data?.data?.totalPages >= page
-    ) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  const newMessagesListener = useCallback(
-    (data) => {
-      if (data.chatId !== id) return;
-      setMessages((prev) => [data?.message, ...prev]);
-    },
-    [id]
-  );
+  const handleScroll = useInfiniteScroll({
+    threshold: 60,
+    loading: isLoading,
+    page: page,
+    totalPages: data?.data?.totalPages,
+    setPage: setPage,
+    reverse: true,
+  });
 
   const focusHandler = () => {
     setTimeout(() => {
@@ -113,22 +104,20 @@ const Chat = () => {
       socket.emit(STOP_TYPING, { members, id });
     }, 1000);
   };
+  const newMessagesListener = (data) => {
+    if (data.chatId !== id) return;
+    setMessages((prev) => [data?.message, ...prev]);
+  };
 
-  const startTypingListener = useCallback(
-    (data) => {
-      if (data.chatId !== id) return;
-      setUserTyping(true);
-    },
-    [id]
-  );
+  const startTypingListener = (data) => {
+    if (data.chatId !== id) return;
+    setUserTyping(true);
+  };
 
-  const stopTypingListener = useCallback(
-    (data) => {
-      if (data.chatId !== id) return;
-      setUserTyping(false);
-    },
-    [id]
-  );
+  const stopTypingListener = (data) => {
+    if (data.chatId !== id) return;
+    setUserTyping(false);
+  };
 
   const eventHandler = {
     [NEW_MESSAGE]: newMessagesListener,
@@ -139,6 +128,7 @@ const Chat = () => {
   // useEffect
   useSocketEvents(socket, eventHandler);
 
+  // message
   useEffect(() => {
     if (isSuccess && Array.isArray(data?.data?.messages)) {
       setMessages((prev) => {
@@ -149,6 +139,7 @@ const Chat = () => {
     }
   }, [isSuccess, data]);
 
+  // chat data
   useEffect(() => {
     if (chatIsSuccess && ChatData?.data?.chat?.members) {
       setMembers(ChatData?.data?.chat?.members?.map((m) => m._id));
@@ -174,7 +165,10 @@ const Chat = () => {
   }
 
   return (
-    <section className="h-full w-full rounded-md flex flex-col">
+    <section
+      aria-label="chat-box"
+      className="h-full w-full rounded-md flex flex-col"
+    >
       {/* Top bar */}
       {ChatData?.data?.isGroupChat ? (
         <GroupChatButton data={{ groupName: ChatData?.data?.groupName }} />
@@ -226,4 +220,3 @@ const Chat = () => {
 };
 
 export default Chat;
-

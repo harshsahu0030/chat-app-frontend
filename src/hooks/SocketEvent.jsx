@@ -11,5 +11,7 @@ export const useSocketEvents = (socket, handlers) => {
         socket.off(event, handler);
       });
     };
+
+    // eslint-disable-next-line
   }, [socket, handlers]);
 };

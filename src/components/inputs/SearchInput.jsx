@@ -3,7 +3,7 @@ import { IoSearchSharp } from "react-icons/io5";
 
 const SearchInput = ({ id, name, value, placeholder, onChange }) => {
   return (
-    <div className="relative flex flex-col gap-1">
+    <div className="relative w-full">
       <input
         id={id || ""}
         name={name || ""}

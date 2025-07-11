@@ -277,7 +277,10 @@ const Profile = () => {
   }
 
   return (
-    <div className="h-full w-full flex flex-col gap-2">
+    <section
+      aria-label="profile-section"
+      className="h-full w-full flex flex-col gap-2"
+    >
       {/* top  */}
       <div className="flex items-center justify-between gap-5 bg-surface p-4 rounded-lg">
         <span className="text-base font-semibold">
@@ -316,7 +319,7 @@ const Profile = () => {
           ),
         }[status]
       }
-    </div>
+    </section>
   );
 };
 

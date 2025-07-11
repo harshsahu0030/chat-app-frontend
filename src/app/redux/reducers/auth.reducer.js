@@ -13,7 +13,7 @@ import {
 const initialState = {
   user: null,
   isAuthenticated: false,
-  loading: false,
+  loading: true,
   message: null,
   error: null,
 };
@@ -22,15 +22,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    userExists: (state, action) => {
-      state.user = action.payload;
-      state.loading = false;
-    },
-    userNotExists: (state) => {
-      state.user = null;
-      state.loading = false;
-    },
-
     clearMessage: (state) => {
       state.message = null;
     },
@@ -38,11 +29,13 @@ const authSlice = createSlice({
       state.error = null;
     },
   },
-
   extraReducers: (builder) => {
     builder
+      // Register
       .addCase(userRegister.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userRegister.fulfilled, (state, action) => {
         state.loading = false;
@@ -50,12 +43,14 @@ const authSlice = createSlice({
       })
       .addCase(userRegister.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Unable to Register";
-      });
+        state.error = action.error.message || "Unable to register.";
+      })
 
-    builder
+      // Verify
       .addCase(userVerify.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userVerify.fulfilled, (state, action) => {
         state.loading = false;
@@ -63,12 +58,14 @@ const authSlice = createSlice({
       })
       .addCase(userVerify.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Unable to fetch USer";
-      });
+        state.error = action.error.message || "Unable to verify user.";
+      })
 
-    builder
+      // Login
       .addCase(userLogin.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.loading = false;
@@ -78,12 +75,14 @@ const authSlice = createSlice({
       })
       .addCase(userLogin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "unable to login";
-      });
+        state.error = action.error.message || "Unable to login.";
+      })
 
-    builder
+      // Load user
       .addCase(userLoad.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userLoad.fulfilled, (state, action) => {
         state.loading = false;
@@ -92,11 +91,15 @@ const authSlice = createSlice({
       })
       .addCase(userLoad.rejected, (state) => {
         state.loading = false;
-      });
+        state.isAuthenticated = false;
+        state.user = null;
+      })
 
-    builder
+      // Logout
       .addCase(userLogout.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userLogout.fulfilled, (state, action) => {
         state.loading = false;
@@ -106,42 +109,44 @@ const authSlice = createSlice({
       })
       .addCase(userLogout.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Unable to Logout";
-      });
+        state.error = action.error.message || "Unable to logout.";
+      })
 
-    builder
+      // Forgot password
       .addCase(userForgotPassword.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userForgotPassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = null;
-        state.isAuthenticated = false;
         state.message = action.payload.message;
       })
       .addCase(userForgotPassword.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Internal Server Error";
-      });
+        state.error = action.error.message || "Internal server error.";
+      })
 
-    builder
+      // Reset password
       .addCase(userResetPassword.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userResetPassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = null;
-        state.isAuthenticated = false;
         state.message = action.payload.message;
       })
       .addCase(userResetPassword.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Internal Server Error";
-      });
+        state.error = action.error.message || "Internal server error.";
+      })
 
-    builder
+      // Update profile
       .addCase(userUpdateProfile.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.message = null;
       })
       .addCase(userUpdateProfile.fulfilled, (state, action) => {
         state.loading = false;
@@ -151,11 +156,10 @@ const authSlice = createSlice({
       })
       .addCase(userUpdateProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Internal Server Error";
+        state.error = action.error.message || "Internal server error.";
       });
   },
 });
 
 export default authSlice;
-export const { userExists, userNotExists, clearMessage, clearError } =
-  authSlice.actions;
+export const { clearMessage, clearError } = authSlice.actions;

@@ -7,7 +7,7 @@ const Navbar = () => {
 
   return (
     <nav className="h-full w-full">
-      <ul className="h-full w-full grid grid-cols-5">
+      <ul className="h-full w-full grid grid-cols-4">
         {Navbarlinks?.map((item, index) => (
           <li
             key={index}

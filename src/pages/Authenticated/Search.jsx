@@ -6,6 +6,7 @@ import { useDebounce } from "../../hooks/DebounceHook";
 import { useTanstackApiResponse } from "../../hooks/ApiResponse";
 import { getusersApi } from "../../app/api/user.api";
 import NavigateBoxSkeleton from "../../components/skeletons/NavigateBoxSkeleton";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 const Search = () => {
   const ThreHold = 60;
@@ -31,22 +32,13 @@ const Search = () => {
     setPage(1);
   };
 
-  const handleScroll = (e) => {
-    const scrollTop = Math.floor(e.target.scrollTop);
-    const clientHeight = Math.floor(e.target.clientHeight);
-    const scrollHeight = Math.floor(e.target.scrollHeight);
-
-    const remaingHeight = scrollHeight - scrollTop - clientHeight;
-
-    if (
-      remaingHeight < ThreHold &&
-      !isLoading &&
-      data?.data?.filteredUsers !== users.length &&
-      data?.data?.totalPages >= page
-    ) {
-      setPage((prev) => prev + 1);
-    }
-  };
+  const handleScroll = useInfiniteScroll({
+    threshold: 60,
+    loading: isLoading,
+    page: page,
+    totalPages: data?.data?.totalPages,
+    setPage: setPage,
+  });
 
   //useEffect
   useEffect(() => {
@@ -57,8 +49,7 @@ const Search = () => {
   useEffect(() => {
     if (isSuccess && Array.isArray(data?.data?.users)) {
       setUsers((prev) => {
-        const existingIds = new Set(prev.map((u) => u._id));
-        const newUsers = data.data.users.filter((u) => !existingIds.has(u._id));
+        const newUsers = data.data.users;
         return [...prev, ...newUsers];
       });
     }
@@ -71,7 +62,10 @@ const Search = () => {
   });
 
   return (
-    <section className="h-full w-full rounded-md flex flex-col gap-4 overflow-hidden">
+    <section
+      aria-label="search-list"
+      className="h-full w-full rounded-md flex flex-col gap-4 overflow-hidden"
+    >
       <SearchInput
         id="search-users"
         name={"search"}

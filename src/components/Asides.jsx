@@ -12,7 +12,7 @@ import Banner from "/ShreejiTechSolution-Banne.jpeg";
 export const LeftAsides = () => {
   const { user } = useSelector((state) => state.auth);
   return (
-    <div className="h-full w-full overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-bg hover:[&::-webkit-scrollbar-thumb]:bg-surface flex flex-col gap-2">
+    <section className="h-full w-full overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-bg hover:[&::-webkit-scrollbar-thumb]:bg-surface flex flex-col gap-2">
       <h5 className="text-xs font-medium uppercase text-text py-2 border-b border-text">
         quick links
       </h5>
@@ -43,7 +43,7 @@ export const LeftAsides = () => {
       ) : (
         <NavigateBoxSkeleton count={4} />
       )}
-    </div>
+    </section>
   );
 };
 
@@ -60,7 +60,7 @@ export const RightAsides = () => {
     error: error?.response?.data?.message,
   });
   return (
-    <div className="h-full w-full overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-bg hover:[&::-webkit-scrollbar-thumb]:bg-surface flex flex-col gap-2">
+    <aside className="h-full w-full overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-bg hover:[&::-webkit-scrollbar-thumb]:bg-surface flex flex-col gap-2">
       <h5 className="text-xs font-medium uppercase text-text py-2 border-b border-text">
         sponsored
       </h5>
@@ -82,6 +82,6 @@ export const RightAsides = () => {
           <UserButton key={index} data={item} />
         ))
       )}
-    </div>
+    </aside>
   );
 };
