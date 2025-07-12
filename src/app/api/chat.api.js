@@ -35,9 +35,18 @@ export const getMessagesApi = async ({ id, page = 1 }) => {
   );
   return data;
 };
+
 export const sendMessageApi = async (form) => {
   const { data } = await axios.post(
     `${server}/api/v1/message/send`,
+    form,
+    config
+  );
+  return data;
+};
+export const createGroupApi = async (form) => {
+  const { data } = await axios.post(
+    `${server}/api/v1/group/create`,
     form,
     config
   );

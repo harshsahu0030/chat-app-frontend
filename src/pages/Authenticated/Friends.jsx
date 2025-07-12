@@ -21,7 +21,7 @@ const Friends = () => {
   const debouncedSearch = useDebounce(search, 800);
 
   //react-queries
-  const { isError, error, data, isLoading, refetch, isSuccess } = useQuery({
+  const { isError, error, data, isLoading, isSuccess } = useQuery({
     queryKey: ["friends", debouncedSearch, page],
     queryFn: () => getFriendsApi({ search: debouncedSearch, page }),
   });
@@ -42,10 +42,14 @@ const Friends = () => {
   });
 
   //useEffect
+
   useEffect(() => {
     if (isSuccess && Array.isArray(data?.data?.friends)) {
       setUsers((prev) => {
-        const newUsers = data?.data?.friends;
+        const existingIds = new Set(prev.map((u) => u._id));
+        const newUsers = data?.data?.friends.filter(
+          (u) => !existingIds.has(u._id)
+        );
         return [...prev, ...newUsers];
       });
     }

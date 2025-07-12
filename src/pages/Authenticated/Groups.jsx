@@ -11,9 +11,11 @@ import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { NEW_MESSAGE_ALERT, ONLINE_USERS } from "../../constant/events";
 import { getSocket } from "../../Socket";
 import { useSocketEvents } from "../../hooks/SocketEvent";
+import { useNavigate } from "react-router-dom";
 
-const Chats = () => {
+const Groups = () => {
   const socket = getSocket();
+  const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -86,6 +88,14 @@ const Chats = () => {
       aria-label="chats-list"
       className="h-full w-full rounded-md flex flex-col gap-4 overflow-hidden"
     >
+      <button
+        type="button"
+        onClick={() => navigate("/groups/create")}
+        className="max-h-fit flex-1/2 flex items-center justify-center gap-1 p-2 rounded-lg font-semibold cursor-pointer transition-all hover:scale-95 bg-primary"
+      >
+        <span className="text-xs md:text-sm capitalize">Create Group</span>
+      </button>
+
       <div className="flex items-center gap-2 w-full">
         <SearchInput
           id="search-chats"
@@ -119,4 +129,4 @@ const Chats = () => {
   );
 };
 
-export default Chats;
+export default Groups;

@@ -21,7 +21,7 @@ const ChatListButton = ({ data }) => {
               ? data?.avatar?.url
                 ? data?.avatar?.url
                 : GroupImg
-              : data?.members.filter(
+              : data?.members?.filter(
                   (u) => u._id.toString() !== user._id.toString()
                 )[0]?.avatar?.url || UserImg
           }
@@ -36,7 +36,7 @@ const ChatListButton = ({ data }) => {
           <span className="text-sm font-medium line-clamp-1">
             {data?.isGroupChat
               ? data?.groupName
-              : data?.members.filter(
+              : data?.members?.filter(
                   (u) => u._id.toString() !== user._id.toString()
                 )[0]?.username || "Rista User"}
           </span>

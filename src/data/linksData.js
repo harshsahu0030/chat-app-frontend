@@ -2,13 +2,12 @@ import { IoCall, IoHomeOutline } from "react-icons/io5";
 import { IoHome } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
-import { IoNotificationsOutline } from "react-icons/io5";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { IoPeopleOutline } from "react-icons/io5";
 import { IoPeopleSharp } from "react-icons/io5";
 import { FaBlog } from "react-icons/fa";
 import { IoHelpCircle } from "react-icons/io5";
-import { MdPrivacyTip } from "react-icons/md";
+import { MdGroup, MdOutlineGroupAdd, MdPrivacyTip } from "react-icons/md";
 import { IoIosInformationCircle } from "react-icons/io";
 import { VscDebugBreakpointConditional } from "react-icons/vsc";
 
@@ -59,10 +58,10 @@ export const Navbarlinks = [
     activeIcon: IoSearchSharp,
   },
   {
-    label: "notifications",
-    url: "/notifications",
-    icon: IoNotificationsOutline,
-    activeIcon: IoNotificationsSharp,
+    label: "groups",
+    url: "/groups",
+    icon: MdOutlineGroupAdd,
+    activeIcon: MdGroup,
   },
   {
     label: "friends",
@@ -83,12 +82,12 @@ export const navigateButtonLinks = [
     url: "/users",
     icon: IoSearchSharp,
   },
-
   {
-    label: "notifications",
-    url: "/notifications",
-    icon: IoNotificationsSharp,
+    label: "groups",
+    url: "/groups",
+    icon: MdOutlineGroupAdd,
   },
+
   {
     label: "friends",
     url: "/friends",

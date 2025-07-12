@@ -11,12 +11,12 @@ import store from "./app/redux/store.js";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <Toaster position="top-right" reverseOrder={false} />
-          <App />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </Provider>
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <Toaster position="top-right" reverseOrder={false} />
+        <App />
+      </ThemeProvider>
+    </QueryClientProvider>
+  </Provider>
 );

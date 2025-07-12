@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FriendRequestButton from "../../components/buttons/FriendRequestButton";
 import { getFriendRequestsApi } from "../../app/api/user.api";
 import { useQuery } from "@tanstack/react-query";
@@ -8,9 +8,10 @@ import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 const FriendsRequest = () => {
   const [page, setPage] = useState(1);
+  const [users, setUsers] = useState([]);
 
   //react-queries
-  const { isError, error, data, isLoading, refetch } = useQuery({
+  const { isError, error, data, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["friends-request", page],
     queryFn: () => getFriendRequestsApi({ page }),
   });
@@ -22,6 +23,18 @@ const FriendsRequest = () => {
     totalPages: data?.data?.totalPages,
     setPage: setPage,
   });
+
+  useEffect(() => {
+    if (isSuccess && Array.isArray(data?.data?.friendRequests[0]?.requests)) {
+      setUsers((prev) => {
+        const existingIds = new Set(prev.map((u) => u._id));
+        const newUsers = data?.data?.friendRequests[0].requests?.filter(
+          (u) => !existingIds.has(u._id)
+        );
+        return [...prev, ...newUsers];
+      });
+    }
+  }, [isSuccess, data]);
 
   //api response
   useTanstackApiResponse({
@@ -36,8 +49,8 @@ const FriendsRequest = () => {
       >
         {isLoading ? (
           <NavigateBoxSkeleton count={1} />
-        ) : data && data?.data?.friendRequests[0]?.requests.length > 0 ? (
-          data?.data?.friendRequests[0]?.requests?.map((item, index) => (
+        ) : users.length > 0 ? (
+          users?.map((item, index) => (
             <FriendRequestButton key={index} data={item} refetch={refetch} />
           ))
         ) : (

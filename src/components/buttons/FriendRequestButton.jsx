@@ -21,8 +21,8 @@ const FriendRequestButton = ({ data, refetch }) => {
     },
     onSuccess: (data) => {
       toast.success(data.message);
-      refetch();
     },
+    onSettled: () => refetch(),
   });
 
   const { mutate: rejectMutate, isPending: rejectPending } = useMutation({
@@ -33,8 +33,8 @@ const FriendRequestButton = ({ data, refetch }) => {
     },
     onSuccess: (data) => {
       toast.success(data.message);
-      refetch();
     },
+    onSettled: () => refetch(),
   });
 
   return (
@@ -74,7 +74,6 @@ const FriendRequestButton = ({ data, refetch }) => {
           </button>
           <button
             onClick={() => rejectMutate(data?._id)}
-
             disabled={isPending || rejectPending}
             button="button"
             className="text-xs p-2 bg-red-400 rounded-lg cursor-pointer transition-all hover:scale-95 disabled::cursor-not-allowed"

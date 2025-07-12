@@ -1,45 +1,73 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../../components/inputs/TextInput";
-import SubmitButton from "../../components/buttons/SubmitButton";
-import AvatarInput from "../../components/inputs/AvatarInput";
-import TextArea from "../../components/inputs/TextArea";
-import GroupImg from "/group.png";
-import MembersDialog from "../../components/DialogBox/MembersDialog";
-import GroupMemberButton from "../../components/buttons/GroupMemberButton";
 import SearchInput from "../../components/inputs/SearchInput";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getFriendsApi } from "../../app/api/user.api";
+import { useDebounce } from "../../hooks/DebounceHook";
+import NavigateBoxSkeleton from "../../components/skeletons/NavigateBoxSkeleton";
+import { useTanstackApiResponse } from "../../hooks/ApiResponse";
+import AddUserGroupBox from "./AddUserGroupBox";
+import FunctionButton from "../../components/buttons/FunctionButton";
+import toast from "react-hot-toast";
+import { createGroupApi } from "../../app/api/chat.api";
+import { useNavigate } from "react-router-dom";
 
 const CreateGroup = () => {
-  const [show, setShow] = useState(false);
-  const [updateUser, setUpdateUser] = useState({
-    name: "",
-    description: "",
+  const navigate = useNavigate();
+
+  const [createGroup, setCreateGroup] = useState({
+    groupName: "",
   });
-  const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState(GroupImg);
+  const [search, setSearch] = useState("");
+  const [users, setUsers] = useState([]);
+
+  const [members, setMembers] = useState([]);
+
+  //hook
+  const debouncedSearch = useDebounce(search, 800);
+
+  //react-queries
+  const { isError, error, data, isLoading, isSuccess } = useQuery({
+    queryKey: ["friends", debouncedSearch],
+    queryFn: () => getFriendsApi({ search: debouncedSearch }),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createGroupApi,
+    onSuccess: (data) => {
+      toast.success(data.message);
+      navigate("/");
+    },
+    onError: (error) => toast.error(error.response?.data?.message),
+  });
 
   // function
   const onChangeHandler = (e) => {
-    setUpdateUser({ ...updateUser, [e.target.name]: e.target.value });
+    setCreateGroup({ ...createGroup, [e.target.name]: e.target.value });
   };
 
-  const avatarHandler = (e) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatarPreview(reader.result);
-        setAvatar(reader.result);
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
+  //function
+  const handleChange = (e) => {
+    setUsers([]);
+    setSearch(e.target.value);
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    console.log({ ...updateUser, avatar });
+  const SubmitHandler = () => {
+    mutate({ ...createGroup, members });
   };
+
+  //useFFect
+  useEffect(() => {
+    if (isSuccess) {
+      setUsers(data?.data?.friends);
+    }
+  }, [isSuccess, data]);
+
+  //api response
+  useTanstackApiResponse({
+    isError,
+    error: error?.response?.data?.message,
+  });
 
   return (
     <section className="h-full w-full flex flex-col gap-2 p-2 overflow-y-scroll [&::-webkit-scrollbar]:hidden">
@@ -51,27 +79,13 @@ const CreateGroup = () => {
       <hr className="my-2 text-text/40" />
 
       {/* center  */}
-      <form className="flex flex-col gap-4" onSubmit={submitHandler}>
-        <AvatarInput
-          id="group-avatar"
-          name="avatar"
-          avatarHandler={avatarHandler}
-          avatarPreview={avatarPreview}
-        />
+      <div className="flex flex-col gap-4">
         <TextInput
           id="group-name"
-          name="name"
+          name="groupName"
           label="Name"
-          value={updateUser.name}
+          value={createGroup.groupName}
           placeholder="name"
-          onChange={onChangeHandler}
-        />
-        <TextArea
-          id="group-description"
-          name="description"
-          label="Description"
-          value={updateUser.description}
-          placeholder="description"
           onChange={onChangeHandler}
         />
 
@@ -81,31 +95,36 @@ const CreateGroup = () => {
 
         <div className="flex flex-col gap-2">
           <SearchInput
-            name="create-group-search"
-            placeholder={"search by useranme, name"}
+            id="search-friends"
+            name="search"
+            value={search}
+            placeholder="Search Friends"
+            onChange={handleChange}
           />
+          {users?.map((item) => (
+            <AddUserGroupBox
+              key={item._id}
+              data={item}
+              members={members}
+              setMembers={setMembers}
+            />
+          ))}
 
-
-
-          <h5 className="text-xs font-medium uppercase text-text py-2 border-b border-text">
-            Search members
-          </h5>
-
-
-          
-          <h5 className="text-xs font-medium uppercase text-text py-2 border-b border-text">
-            Added members
-          </h5>
-          <GroupMemberButton />
-          <GroupMemberButton />
-          <GroupMemberButton />
-          <GroupMemberButton />
-
-          {!!show && <MembersDialog closeHandler={() => setShow(false)} />}
+          {isLoading ? (
+            <NavigateBoxSkeleton count={1} />
+          ) : (
+            <span className="text-sm text-text/50 w-full text-center py-1">
+              No more users found
+            </span>
+          )}
         </div>
 
-        <SubmitButton label="Submit" />
-      </form>
+        <FunctionButton
+          label="Submit"
+          disabled={isPending}
+          clickHandler={SubmitHandler}
+        />
+      </div>
     </section>
   );
 };

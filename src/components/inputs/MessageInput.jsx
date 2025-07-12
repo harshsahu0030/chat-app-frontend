@@ -38,7 +38,8 @@ const MessageInput = ({
           value={message}
           placeholder={"Enter Message"}
           onChange={onChange}
-          className="bg-bg text-sm w-full p-2 rounded-md outline-none border border-transparent focus:border-primary resize-none overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-bg [&::-webkit-scrollbar-thumb]:bg-surface"
+          disabled={disabled}
+          className="bg-bg text-sm w-full p-2 rounded-md outline-none border border-transparent focus:border-primary resize-none overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-bg [&::-webkit-scrollbar-thumb]:bg-surface disabled:bg-surface/50 disabled:cursor-not-allowed"
         />
         <button
           disabled={disabled}

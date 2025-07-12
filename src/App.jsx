@@ -5,6 +5,7 @@ import PageLoader from "./components/Loader/PageLoader.jsx";
 import Error from "./pages/Error.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoad } from "./app/redux/thunk/auth.thunk.js";
+import Groups from "./pages/Authenticated/Groups.jsx";
 
 //auth
 const Login = lazy(() => import("./pages/Auth/Login.jsx"));
@@ -14,7 +15,6 @@ const ResetPassword = lazy(() => import("./pages/Auth/ResetPassword.jsx"));
 const VerifyUser = lazy(() => import("./pages/Auth/VerifyUser.jsx"));
 
 //authenticated
-const Home = lazy(() => import("./pages/Authenticated/Home.jsx"));
 const Bookmarks = lazy(() => import("./pages/Authenticated/Bookmarks.jsx"));
 const Chat = lazy(() => import("./pages/Authenticated/Chat.jsx"));
 const Search = lazy(() => import("./pages/Authenticated/Search.jsx"));
@@ -24,9 +24,7 @@ const FriendsRequest = lazy(() =>
   import("./pages/Authenticated/FriendsRequest.jsx")
 );
 const Profile = lazy(() => import("./pages/Authenticated/Profile.jsx"));
-const Notifications = lazy(() =>
-  import("./pages/Authenticated/Notifications.jsx")
-);
+
 const UpdateProfile = lazy(() =>
   import("./pages/Authenticated/UpdateProfile.jsx")
 );
@@ -63,13 +61,13 @@ const App = () => {
       children: [
         { index: true, element: <Chats /> },
         { path: "chats/:id", element: <Chat /> },
+        { path: "groups", element: <Groups /> },
         { path: "bookmarks", element: <Bookmarks /> },
         { path: "groups/create", element: <CreateGroup /> },
         { path: "users", element: <Search /> },
         { path: "users/:id", element: <Profile /> },
         { path: "friends", element: <Friends /> },
         { path: "friends/request", element: <FriendsRequest /> },
-        { path: "notifications", element: <Notifications /> },
         { path: "user/update/:id", element: <UpdateProfile /> },
       ],
     },

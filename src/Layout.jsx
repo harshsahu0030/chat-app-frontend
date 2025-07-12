@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import { lazy, Suspense } from "react";

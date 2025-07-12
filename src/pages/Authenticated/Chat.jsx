@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import {
   getChatApi,
   getMessagesApi,
@@ -14,7 +14,6 @@ import { useSocketEvents } from "../../hooks/SocketEvent";
 import { getSocket } from "../../Socket";
 import {
   NEW_MESSAGE,
-  NEW_MESSAGE_ALERT,
   START_TYPING,
   STOP_TYPING,
 } from "../../constant/events";
@@ -23,10 +22,13 @@ import MessageSkeleton from "../../components/skeletons/MessageSkeleton";
 import toast from "react-hot-toast";
 import { useRef } from "react";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
   const socket = getSocket();
   const { id } = useParams();
+  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const messagesContainerRef = useRef(null);
 
@@ -66,7 +68,11 @@ const Chat = () => {
     onError: (error) => {
       toast.error(error.response.data.message);
     },
-    // onSuccess: (data) => {},
+    onSuccess: () => {
+      if (ChatData?.data?.chat?._id !== id) {
+        navigate(`/chats/${ChatData?.data?.chat?._id}`);
+      }
+    },
   });
 
   const onChange = (e) => setMessage(e.target.value);
@@ -137,14 +143,20 @@ const Chat = () => {
         return [...prev, ...newOnes];
       });
     }
-  }, [isSuccess, data]);
+
+    return () => {
+      setMessages([]);
+      setMessage("");
+      setPage(1);
+    };
+  }, [isSuccess, data, members, socket, user]);
 
   // chat data
   useEffect(() => {
     if (chatIsSuccess && ChatData?.data?.chat?.members) {
       setMembers(ChatData?.data?.chat?.members?.map((m) => m._id));
     }
-  }, [chatIsSuccess, ChatData?.data?.chat?.members]);
+  }, [chatIsSuccess, ChatData, id, navigate]);
 
   useTanstackApiResponse({
     isError,
@@ -206,6 +218,7 @@ const Chat = () => {
       )}
 
       {/* Input */}
+
       <MessageInput
         blurHandler={blurHandler}
         focusHandler={focusHandler}
