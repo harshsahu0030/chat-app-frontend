@@ -12,11 +12,7 @@ import MessageInput from "../../components/inputs/MessageInput";
 import { useTanstackApiResponse } from "../../hooks/ApiResponse";
 import { useSocketEvents } from "../../hooks/SocketEvent";
 import { getSocket } from "../../Socket";
-import {
-  NEW_MESSAGE,
-  START_TYPING,
-  STOP_TYPING,
-} from "../../constant/events";
+import { NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../../constant/events";
 import Message from "../../components/messageBox/Message";
 import MessageSkeleton from "../../components/skeletons/MessageSkeleton";
 import toast from "react-hot-toast";
@@ -69,7 +65,7 @@ const Chat = () => {
       toast.error(error.response.data.message);
     },
     onSuccess: () => {
-      if (ChatData?.data?.chat?._id !== id) {
+      if (ChatData?.data?.chat?._id || ChatData?.data?._id !== id) {
         navigate(`/chats/${ChatData?.data?.chat?._id}`);
       }
     },
