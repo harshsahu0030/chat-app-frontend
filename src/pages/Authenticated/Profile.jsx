@@ -1,4 +1,4 @@
-import { createElement, useEffect, useState, useMemo } from "react";
+import { createElement, useState } from "react";
 import UserImg from "/userprofile.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdEdit } from "react-icons/md";

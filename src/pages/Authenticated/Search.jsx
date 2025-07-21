@@ -9,8 +9,6 @@ import NavigateBoxSkeleton from "../../components/skeletons/NavigateBoxSkeleton"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 const Search = () => {
-  const ThreHold = 60;
-
   //state
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -18,11 +16,12 @@ const Search = () => {
 
   //hook
   const debouncedSearch = useDebounce(search, 800);
+  const debouncedPage = useDebounce(page, 500);
 
   //react-queries
   const { isError, error, data, isLoading, refetch, isSuccess } = useQuery({
-    queryKey: ["users", debouncedSearch, page],
-    queryFn: () => getusersApi({ search: debouncedSearch, page }),
+    queryKey: ["users", debouncedSearch, debouncedPage],
+    queryFn: () => getusersApi({ search: debouncedSearch, debouncedPage }),
   });
 
   //functions
@@ -82,13 +81,9 @@ const Search = () => {
           <UserButton key={index} data={item} />
         ))}
 
-        {isLoading ? (
+        {isLoading || data?.data?.totalPages > page ? (
           <NavigateBoxSkeleton count={1} />
-        ) : (
-          <span className="text-sm text-text/50 w-full text-center py-1">
-            No more users found
-          </span>
-        )}
+        ) : null}
       </div>
     </section>
   );

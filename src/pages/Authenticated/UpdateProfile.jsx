@@ -68,7 +68,9 @@ const UpdateProfile = () => {
         name: user.name,
         bio: user.bio,
       });
-      setAvatarPreview(user.avatar.url);
+      if (user.avatar?.url) {
+        setAvatarPreview(user.avatar.url);
+      }
     }
   }, [user]);
 

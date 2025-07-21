@@ -19,7 +19,12 @@ import { getSocket } from "../../Socket";
 import { useSocketEvents } from "../../hooks/SocketEvent";
 import { useTanstackApiResponse } from "../../hooks/ApiResponse";
 
-import { NEW_MESSAGE, START_TYPING, STOP_TYPING } from "../../constant/events";
+import {
+  NEW_MESSAGE,
+  NEW_MESSAGE_ALERT,
+  START_TYPING,
+  STOP_TYPING,
+} from "../../constant/events";
 
 import ChatUserButton from "../../components/buttons/ChatUserButton";
 import GroupChatButton from "../../components/buttons/GroupChatButton";
@@ -42,6 +47,7 @@ const Chat = () => {
   // Fetch chat data
   const {
     data: ChatData,
+    isSuccess: chatIsSuccess,
     isLoading: chatIsLoading,
     isError: chatIsError,
     error: chatError,
@@ -57,11 +63,10 @@ const Chat = () => {
   }, [ChatData]);
 
   // Fetch messages by page
-  const { data, isSuccess, isLoading, isError, error } = useQuery({
+  const { data, isSuccess, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["messages", id, page],
     queryFn: () => getMessagesApi({ id, page }),
     refetchOnWindowFocus: true,
-    staleTime: 10000,
   });
 
   const { mutate, isPending } = useMutation({
@@ -114,6 +119,15 @@ const Chat = () => {
     setMessages((prev) => [data?.message, ...prev]);
   };
 
+  const newMessageAlert = useCallback(
+    (data) => {
+      if (data?.chat?._id !== id) {
+        toast.success("New Message");
+      }
+    },
+    [id]
+  );
+
   const startTypingListener = (data) => {
     if (data.chatId === id) setUserTyping(true);
   };
@@ -126,6 +140,7 @@ const Chat = () => {
     [NEW_MESSAGE]: newMessagesListener,
     [START_TYPING]: startTypingListener,
     [STOP_TYPING]: stopTypingListener,
+    [NEW_MESSAGE_ALERT]: newMessageAlert,
   });
 
   // Load messages into state
@@ -140,6 +155,19 @@ const Chat = () => {
       });
     }
   }, [isSuccess, data]);
+
+  useEffect(() => {
+    if (chatIsSuccess) {
+      if (ChatData?.data?.chat === null) {
+        return;
+      } else {
+        if (ChatData?.data?.chat?._id !== id) {
+          navigate(`/chats/${ChatData?.data?.chat?._id}`);
+          refetch();
+        }
+      }
+    }
+  }, [id, ChatData?.data?.chat, chatIsSuccess, navigate, refetch]);
 
   // Reset state on unmount
   useEffect(() => {

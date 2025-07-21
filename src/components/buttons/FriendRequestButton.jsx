@@ -42,7 +42,7 @@ const FriendRequestButton = ({ data, refetch }) => {
       {/* left  */}
       <div
         className="h-10 min-w-10 w-10 rounded-full bg-bg"
-        onClick={() => navigate("/abc123")}
+        onClick={() => navigate(`/users/${data._id}`)}
       >
         <img
           src={data?.avatar?.url ? data?.avatar?.url : UserImg}
@@ -55,7 +55,7 @@ const FriendRequestButton = ({ data, refetch }) => {
       <div className="w-full flex justify-between items-center">
         <div
           className="flex flex-col justify-center"
-          onClick={() => navigate("/abc123")}
+          onClick={() => navigate(`/users/${data._id}`)}
         >
           <span className="text-sm font-medium line-clamp-1">
             {data?.username}

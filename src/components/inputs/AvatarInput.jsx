@@ -1,6 +1,4 @@
-import React from "react";
 import { MdCloudUpload } from "react-icons/md";
-import UserImg from "/userprofile.png";
 
 const AvatarInput = ({ id, name, avatarHandler, value, avatarPreview }) => {
   return (

@@ -7,7 +7,6 @@ const TextArea = ({ label, value, onChange, id, name, placeholder, error }) => {
         {label}
       </label>
       <textarea
-      
         rows={3}
         id={id || ""}
         name={name || ""}

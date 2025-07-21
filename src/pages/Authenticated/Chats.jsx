@@ -11,6 +11,7 @@ import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { NEW_MESSAGE_ALERT, ONLINE_USERS } from "../../constant/events";
 import { getSocket } from "../../Socket";
 import { useSocketEvents } from "../../hooks/SocketEvent";
+import toast from "react-hot-toast";
 
 const Chats = () => {
   const socket = getSocket();
@@ -49,6 +50,8 @@ const Chats = () => {
       let newArr = prev.filter((chat) => chat._id !== data.chat._id);
       return [data.chat, ...newArr];
     });
+
+    toast.success("New Message");
   }, []);
 
   const eventHandler = {
