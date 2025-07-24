@@ -57,6 +57,8 @@ const Chat = () => {
     retry: 2,
   });
 
+  console.log(ChatData);
+
   // Extract members with useMemo
   const members = useMemo(() => {
     return ChatData?.data?.chat?.members?.map((m) => m._id) || [];
@@ -161,13 +163,13 @@ const Chat = () => {
       if (ChatData?.data?.chat === null) {
         return;
       } else {
-        if (ChatData?.data?.chat?._id !== id) {
+        if (ChatData?.data?.chat?._id || ChatData?.data?._id !== id) {
           navigate(`/chats/${ChatData?.data?.chat?._id}`);
           refetch();
         }
       }
     }
-  }, [id, ChatData?.data?.chat, chatIsSuccess, navigate, refetch]);
+  }, [id, ChatData, chatIsSuccess, navigate, refetch]);
 
   // Reset state on unmount
   useEffect(() => {
